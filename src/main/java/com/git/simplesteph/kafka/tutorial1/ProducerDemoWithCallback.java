@@ -1,6 +1,7 @@
 package com.git.simplesteph.kafka.tutorial1;
 
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -13,11 +14,11 @@ import org.slf4j.Logger;
 //import com.sun.istack.internal.logging.Logger;
 
 public class ProducerDemoWithCallback {
-	public static void main(String[] args) {
-		Logger logger = LoggerFactory.getLogger(ProducerDemoWithCallback.class);
+	public static void main(String[] args) throws InterruptedException, ExecutionException {
+		final Logger logger = LoggerFactory.getLogger(ProducerDemoWithCallback.class);
 
 		Properties properties = new Properties();
-		String bootsrapServers = "172.16.0.2:9092";
+		String bootsrapServers = "127.0.0.1:9092";
 //        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
 
 		// propriedades do producer
@@ -29,11 +30,13 @@ public class ProducerDemoWithCallback {
 		// crate the producer
 		KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties);
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 20; i++) {
+			String key = "id_"+ Integer.toString(i);
+			logger.info("Key: "+ key);
 			// create a producer record
-			ProducerRecord<String, String> record = new ProducerRecord<String, String>("topic3",
-					"Hello World " + Integer.toString(i));
-
+			ProducerRecord<String, String> record = new ProducerRecord<String, String>("top-1",key,
+					"Usuario - " + Integer.toString(i));
+			
 			producer.send(record, new Callback() {
 				public void onCompletion(RecordMetadata metadata, Exception exception) {
 					// TODO Auto-generated method stub Executa sempre que a operação e bem sucedida
@@ -47,7 +50,7 @@ public class ProducerDemoWithCallback {
 					}
 
 				}
-			});
+			}).get();
 		}
 		producer.flush();
 		producer.close();

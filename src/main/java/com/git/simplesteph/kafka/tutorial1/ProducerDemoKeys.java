@@ -8,13 +8,14 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 //import com.sun.istack.internal.logging.Logger;
 
 public class ProducerDemoKeys {
 	public static void main(String[] args) {
-		Logger logger = LoggerFactory.getLogger(ProducerDemoKeys.class);
+		final Logger logger = LoggerFactory.getLogger(ProducerDemoKeys.class);
 
 		Properties properties = new Properties();
 		String bootsrapServers = "172.16.0.2:9092";
